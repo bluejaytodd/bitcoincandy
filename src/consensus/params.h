@@ -54,6 +54,8 @@ struct Params {
     int cdyHeight;
     /** Block height at which Zawy's LWMA difficulty algorithm becomes active */
     int CDYZawyLWMAHeight;
+    /** Block height at which Zawy's PWMA difficulty algorithm becomes active */
+    int CDYZawyPWMAHeight;
     /** Limit BITCOIN_MAX_FUTURE_BLOCK_TIME **/
     int64_t CDYMaxFutureBlockTime;
     

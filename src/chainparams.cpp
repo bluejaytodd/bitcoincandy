@@ -179,6 +179,7 @@ public:
 
 
         consensus.CDYZawyLWMAHeight = 573123;
+        consensus.CDYZawyPWMAHeight = 599999; //parabolic weighted moving average
 
         consensus.BitcoinPostforkBlock = uint256S("0000000000000000007b746068bd08ba4089f97636690e9dc758774e7db21f17");	// 512666 block hash
         consensus.BitcoinPostforkTime = 1515799972;
@@ -366,6 +367,7 @@ public:
         consensus.cdyHeight = 201601;
         
         consensus.CDYZawyLWMAHeight = 201681; 
+        consensus.CDYZawyPWMAHeight = 201681; 
         consensus.BitcoinPostforkBlock = uint256S("00000000d16d6c2aecc7436eea0c54a53741fee9abf265606aa465d6fd3f3d8a"); // block 201601
         consensus.BitcoinPostforkTime = 1393815074;
 
@@ -509,6 +511,7 @@ public:
         consensus.daaHeight = 2250;
          
         consensus.CDYZawyLWMAHeight = -1;
+        consensus.CDYZawyPWMAHeight = -1;
         
         diskMagic[0] = 0xfa;
         diskMagic[1] = 0xbf;
