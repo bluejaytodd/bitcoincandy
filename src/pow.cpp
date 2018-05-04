@@ -193,9 +193,12 @@ uint32_t GetNextWorkRequired(const CBlockIndex *pindexPrev,
     else if (nHeight < params.CDYZawyLWMAHeight) {
         // Regular Digishield v3.
         return DigishieldGetNextWorkRequired(pindexPrev, pblock, params);
-    } else {
+    }else if (nHeight < params.CDYZawyPWMAHeight) {
         // Zawy's LWMA.
         return LwmaGetNextWorkRequired(pindexPrev, pblock, params);
+    } else {
+        // Zawy's PWMA.
+        return PwmaGetNextWorkRequired(pindexPrev, pblock, params);
     }
     
     // Special rule for regtest: we never retarget.
