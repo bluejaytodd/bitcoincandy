@@ -133,7 +133,7 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
         int64_t solvetime = block->GetBlockTime() - block_Prev->GetBlockTime();
 
         nWeight++;
-        sum_time += solvetime * nWeight;  // Weighted solvetime sum. The nearsest blocks get the most weight. 
+        sum_time += solvetime * nWeight * nWeight;  // Weighted solvetime sum. The nearsest blocks get the most weight. with k^2 pattern
         
         // Target sum divided by a factor, (k N^2).
         // The factor is a part of the final equation. However we divide sum_target here to avoid
@@ -145,13 +145,15 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
     
     
     // Keep t reasonable in case strange solvetimes occurred.
-    if (sum_time < N * N * T / 20) {
-        sum_time = N * N * T / 20;
+    // sum( k^2 ) is N(N+1)(2N+1)/6
+    // next_target could be divided by 10 under extreme case
+    if (sum_time < N * N * 2 * N * T /6 / 10) {
+        sum_time = N * N * 2 * N * T /6 / 10;
     }
 
     const arith_uint256 pow_limit = UintToArith256(params.PowLimit(true));
 
-    arith_uint256 next_target = 2 * (sum_time/(N*(N+1)))* (sum_target/N) * adjust/T; // next_target = LWMA * avgTarget * adjust /T;
+    arith_uint256 next_target = 6 * (sum_time/(N*(N+1)*(2*N+1)) )* (sum_target/N) * adjust/T; // next_target = adjusted_LWMA * avgTarget * adjust /T;
     
     
     if (next_target > pow_limit ){
