@@ -163,6 +163,17 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
     return next_target.GetCompact();
 }
 
+unsigned int PwmaGetNextWorkRequired(const CBlockIndex* pindexPrev, const CBlockHeader *pblock, const Consensus::Params& params)
+{
+    // Special difficulty rule for testnet:
+    // If the new block's timestamp is more than 2 * 10 minutes
+    // then allow mining of a min-difficulty block.
+//    if (params.fPowAllowMinDifficultyBlocks &&
+  //      pblock->GetBlockTime() > pindexPrev->GetBlockTime() + params.nPowTargetSpacingCDY * 2) {
+    //    return UintToArith256(params.PowLimit(true)).GetCompact();
+   // }
+    return PwmaCalculateNextWorkRequired(pindexPrev, params);
+}
 unsigned int PwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
     if (params.fPowNoRetargeting) {

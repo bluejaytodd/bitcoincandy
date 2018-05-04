@@ -23,6 +23,10 @@ uint32_t GetNextWorkRequired(const CBlockIndex *pindexPrev,
 unsigned int LwmaGetNextWorkRequired(const CBlockIndex* pindexPrev, const CBlockHeader *pblock, const Consensus::Params&);
 unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const Consensus::Params& params);
 
+/** Zawy's PWMA -(parobolic weight) next generation algorithm for testnet currently */
+unsigned int PwmaGetNextWorkRequired(const CBlockIndex* pindexPrev, const CBlockHeader *pblock, const Consensus::Params&);
+unsigned int PwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const Consensus::Params& params);
+
 /** Digishield v3 - used in Bitcoin Gold mainnet currently */
 unsigned int DigishieldGetNextWorkRequired(const CBlockIndex* pindexPrev, const CBlockHeader *pblock, const Consensus::Params&);
 unsigned int DigishieldCalculateNextWorkRequired(arith_uint256 bnAvg,  int64_t nLastBlockTime, int64_t nFirstBlockTime, const Consensus::Params& params);
