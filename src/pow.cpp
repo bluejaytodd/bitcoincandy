@@ -133,6 +133,59 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
         int64_t solvetime = block->GetBlockTime() - block_Prev->GetBlockTime();
 
         nWeight++;
+        sum_time += solvetime * nWeight ;  // Weighted solvetime sum. The nearsest blocks get the most weight. 
+        
+        // Target sum divided by a factor, (k N^2).
+        // The factor is a part of the final equation. However we divide sum_target here to avoid
+        // potential overflow.
+        arith_uint256 target;
+        target.SetCompact(block->nBits);
+        sum_target += target ;   // (k * N * N);
+    }
+    
+    
+    // Keep t reasonable in case strange solvetimes occurred.
+    // next_target could be divided by 10 under extreme case
+    if (sum_time < N * N * T /20) {
+        sum_time = N * N * T /20;
+    }
+
+    const arith_uint256 pow_limit = UintToArith256(params.PowLimit(true));
+
+    arith_uint256 next_target = 2 * (sum_time/(N*(N+1))* (sum_target/N) * adjust/T; // next_target = adjusted_LWMA * avgTarget * adjust /T;
+    
+    
+    if (next_target > pow_limit ){
+        return pow_limit.GetCompact();
+    }
+     
+
+    return next_target.GetCompact();
+}
+
+unsigned int PwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const Consensus::Params& params)
+{
+    if (params.fPowNoRetargeting) {
+        return pindexPrev->nBits;
+    }
+
+    const int N = params.nZawyLwmaAveragingWindow;  
+    const int T = params.nPowTargetSpacingCDY; //2 minutes
+    const int height = pindexPrev->nHeight + 1;
+    double adjust = 1;//0.998;
+    
+    assert(height > N);
+
+    arith_uint256 sum_target;
+    int sum_time = 0, nWeight = 0;
+
+    // Loop through N most recent blocks.
+    for (int i = height - N; i < height; i++) {
+        const CBlockIndex* block = pindexPrev->GetAncestor(i);
+        const CBlockIndex* block_Prev = block->GetAncestor(i - 1);
+        int64_t solvetime = block->GetBlockTime() - block_Prev->GetBlockTime();
+
+        nWeight++;
         sum_time += solvetime * nWeight * nWeight;  // Weighted solvetime sum. The nearsest blocks get the most weight. with k^2 pattern
         
         // Target sum divided by a factor, (k N^2).
