@@ -180,7 +180,7 @@ unsigned int PwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
         return pindexPrev->nBits;
     }
 
-    const int N = params.nZawyLwmaAveragingWindow;  
+    const int N = params.nZawyPwmaAveragingWindow;  
     const int T = params.nPowTargetSpacingCDY; //2 minutes
     const int height = pindexPrev->nHeight + 1;
     double adjust = 1;//0.998;

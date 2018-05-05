@@ -129,6 +129,7 @@ public:
 
         consensus.nZawyLwmaAveragingWindow = 60;
         consensus.CDYMaxFutureBlockTime = 7 * 2 * 60; //
+        consensus.nZawyPwmaAveragingWindow = 20;
         
         // two weeks
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60;
@@ -321,6 +322,7 @@ public:
 
         consensus.nZawyLwmaAveragingWindow = 60;
         consensus.CDYMaxFutureBlockTime = 7 * 2 * 60; // 14 mins
+        consensus.nZawyPwmaAveragingWindow = 20;
         // two weeks
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60;
         consensus.nPowTargetSpacing = 10 * 60;
@@ -475,6 +477,7 @@ public:
         consensus.nZawyLwmaAveragingWindow = 45;
         consensus.nZawyLwmaAjustedWeight = 13632;
         consensus.CDYMaxFutureBlockTime = 7 * 10 * 60; // 70 mins
+        consensus.nZawyPwmaAveragingWindow = 20;
 
         consensus.nPowTargetTimespanLegacy = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
