@@ -320,6 +320,8 @@ public:
     uint256 GetBlockHash() const { return *phashBlock; }
 
     int64_t GetBlockTime() const { return int64_t(nTime); }
+    int64_t GetRcvHeaderTime() const { return int64_t(nTimeRcvHeader); } 
+    int64_t GetRcvBlockTime() const { return int64_t(nTimeRcvBlock); } 
 
     int64_t GetBlockTimeMax() const { return int64_t(nTimeMax); }
 

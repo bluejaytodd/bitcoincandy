@@ -21,7 +21,15 @@ uint256 CBlockHeader::GetHash(const Consensus::Params& params) const
         version = PROTOCOL_VERSION | SERIALIZE_BLOCK_LEGACY;
     }
     CHashWriter writer(SER_GETHASH, version);
-    ::Serialize(writer, *this);
+    // set nTimeRcvHeader, nTimeRcvBlock, nTimeConnectTip to 0 
+    // don't share with other nodes 
+    CBlockHeader tmpBH = *this; 
+    tmpBH.nTimeRcvHeader = 0; 
+    tmpBH.nTimeRcvBlock = 0; 
+    tmpBH.nTimeConnectTip = 0; 
+
+    //::Serialize(writer, *this);
+    ::Serialize(writer, tmpBH);
     return writer.GetHash();
 }
 uint256 CBlockHeader::GetHash() const {

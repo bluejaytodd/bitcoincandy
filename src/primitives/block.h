@@ -36,6 +36,9 @@ public:
     uint256 hashMerkleRoot;
     uint32_t nHeight;
     uint32_t nReserved[7];
+    uint32_t nTimeRcvHeader;   // don't share with other node
+    uint32_t nTimeRcvBlock;    // don't share with other node
+    uint32_t nTimeConnectTip;  // don't share with other node 
     uint32_t nTime;
     uint32_t nBits;
     uint256 nNonce;
@@ -56,6 +59,9 @@ public:
             for(size_t i = 0; i < (sizeof(nReserved) / sizeof(nReserved[0])); i++) {
                 READWRITE(nReserved[i]);
             }
+            READWRITE(nTimeRcvHeader); 
+            READWRITE(nTimeRcvBlock); 
+            READWRITE(nTimeConnectTip);
         }
         READWRITE(nTime);
         READWRITE(nBits);
@@ -75,6 +81,9 @@ public:
         hashMerkleRoot.SetNull();
         nHeight = 0;
         memset(nReserved, 0, sizeof(nReserved));
+        nTimeRcvHeader = 0;
+        nTimeRcvBlock = 0;
+        nTimeConnectTip = 0;
         nTime = 0;
         nBits = 0;
         nNonce.SetNull();
@@ -87,6 +96,8 @@ public:
     uint256 GetHash(const Consensus::Params& params) const;
 
     int64_t GetBlockTime() const { return (int64_t)nTime; }
+    int64_t GetRcvHeaderTime() const { return (int64_t)nTimeRcvHeader; } 
+    int64_t GetRcvBlockTime() const { return (int64_t)nTimeRcvBlock; } 
 };
 
 class CBlock : public CBlockHeader {
@@ -125,6 +136,9 @@ public:
         block.hashMerkleRoot = hashMerkleRoot;
         block.nHeight        = nHeight;
         memcpy(block.nReserved, nReserved, sizeof(block.nReserved));
+        block.nTimeRcvHeader = nTimeRcvHeader;
+        block.nTimeRcvBlock = nTimeRcvBlock;
+        block.nTimeConnectTip = nTimeConnectTip;
         block.nTime = nTime;
         block.nBits = nBits;
         block.nNonce = nNonce;
@@ -158,6 +172,9 @@ public:
         for(size_t i = 0; i < (sizeof(nReserved) / sizeof(nReserved[0])); i++) {
             READWRITE(nReserved[i]);
         }
+        READWRITE(nTimeRcvHeader); 
+        READWRITE(nTimeRcvBlock); 
+        READWRITE(nTimeConnectTip);
         READWRITE(nTime);
         READWRITE(nBits);
     }
