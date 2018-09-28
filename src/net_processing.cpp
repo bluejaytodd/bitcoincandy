@@ -2303,7 +2303,9 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
                           pfrom->id);
                 return true;
             }
-        }
+        }else{ 
+        	pindex->nTimeRcvHeader = GetTime(); 
+        }; 
 
         // When we succeed in decoding a block's txids from a cmpctblock
         // message we typically jump to the BLOCKTXN handling code, with a
@@ -2506,6 +2508,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             ProcessNewBlock(config, pblock, true, &fNewBlock);
             if (fNewBlock) {
                 pfrom->nLastBlockTime = GetTime();
+                pblock->nTimeRcvBlock = GetTime();
             }
 
             // hold cs_main for CBlockIndex::IsValid()
@@ -2604,6 +2607,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             ProcessNewBlock(config, pblock, true, &fNewBlock);
             if (fNewBlock) {
                 pfrom->nLastBlockTime = GetTime();
+                pblock->nTimeRcvBlock = GetTime();
             }
         }
     }
@@ -2721,7 +2725,9 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
                 //else return true;
               }
             }
-        }
+        }else{ 
+        	pindexLast->nTimeRcvHeader = GetTime(); 
+        }; 
 
         {
             LOCK(cs_main);
@@ -2865,6 +2871,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
         ProcessNewBlock(config, pblock, forceProcessing, &fNewBlock);
         if (fNewBlock) {
             pfrom->nLastBlockTime = GetTime();
+            pblock->nTimeRcvBlock = GetTime();
         }
     }
 
