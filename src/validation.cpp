@@ -3497,6 +3497,14 @@ static bool ContextualCheckBlockHeader(const Config &config,
                              "block's timestamp is too early");
     }
 
+    // Check timestamp backward 
+    if (nHeight >= consensusParams.CDYEquihashForkHeight &&
+    		block.GetBlockTime() <= nAdjustedTime - std::min(consensusParams.CDYMaxFutureBlockTime,
+    		                                                        BCH_MAX_FUTURE_BLOCK_TIME)) {
+    	return state.Invalid(false, REJECT_INVALID, "time-too-old",
+    	                             "block's timestamp is too early");
+    }
+
     // Check timestamp
     if (block.GetBlockTime() > nAdjustedTime + std::min(consensusParams.CDYMaxFutureBlockTime,
                                                         BCH_MAX_FUTURE_BLOCK_TIME)) {
