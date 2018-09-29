@@ -2509,6 +2509,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             if (fNewBlock) {
                 pfrom->nLastBlockTime = GetTime();
                 pblock->nTimeRcvBlock = GetTime();
+                if(0== pblock->nTimeRcvHeader) pblock->nTimeRcvHeader = GetTime(); 
             }
 
             // hold cs_main for CBlockIndex::IsValid()
@@ -2608,6 +2609,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
             if (fNewBlock) {
                 pfrom->nLastBlockTime = GetTime();
                 pblock->nTimeRcvBlock = GetTime();
+                if(0== pblock->nTimeRcvHeader) pblock->nTimeRcvHeader = GetTime(); 
             }
         }
     }
@@ -2872,6 +2874,7 @@ static bool ProcessMessage(const Config &config, CNode *pfrom,
         if (fNewBlock) {
             pfrom->nLastBlockTime = GetTime();
             pblock->nTimeRcvBlock = GetTime();
+            if(0== pblock->nTimeRcvHeader) pblock->nTimeRcvHeader = GetTime(); 
         }
     }
 
