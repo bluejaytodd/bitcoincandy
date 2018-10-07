@@ -2927,6 +2927,9 @@ bool ActivateBestChain(const Config &config, CValidationState &state,
                     pindexMostWork == chainActive.Tip())
                     return true;
 
+                // reorg
+                pindexFork = chainActive.FindFork(pindexMostWork);
+
                 bool fInvalidFound = false;
                 std::shared_ptr<const CBlock> nullBlockPtr;
                 if (!ActivateBestChainStep(
@@ -3495,6 +3498,13 @@ static bool ContextualCheckBlockHeader(const Config &config,
     if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast()) {
         return state.Invalid(false, REJECT_INVALID, "time-too-old",
                              "block's timestamp is too early");
+    }
+    // Check timestamp backward
+    if (nHeight >= consensusParams.CDYEquihashForkHeight &&
+    		block.GetBlockTime() <= nAdjustedTime - std::min(consensusParams.CDYMaxFutureBlockTime,
+    		                                                        BCH_MAX_FUTURE_BLOCK_TIME)) {
+    	return state.Invalid(false, REJECT_INVALID, "time-too-old",
+    	                             "block's timestamp is too early");
     }
 
     // Check timestamp
