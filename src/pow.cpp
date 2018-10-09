@@ -161,8 +161,8 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
               sum_last5_target += target;
             }     
         }  
-        if(i >= height-3) sum_last03_time += solvetime;     
-        if(i >= height-2) sum_last02_time += solvetime;           
+        if(i >= height-3) sum_last03_time += abs(solvetime);     
+        if(i >= height-2) sum_last02_time += abs(solvetime);           
     }    
     
     // Keep t reasonable in case strange solvetimes occurred.
@@ -186,7 +186,7 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
     // Set Hardfork height : CDYLimitReorgHeight
     if(height>= CDYLimitReorgHeight){
         /*if the last 10 blocks are generated in short minutes, we increase the difficulty of last blocks*/
-        // last 10 block time : 10 15 20 add 30 minute 
+        // last 10 block time : 10 15 20 add 25 minute 
         // ref : https://steemit.com/cdy/@bluejaytodd/bitcoin-candy-cdy-block-time
         if( sum_last10_time <= 10*60 ) 
         {  
@@ -200,12 +200,12 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
         {            
             if(next_target > last_target*5/6)  last10_target = last_target*5/6;   
         }
-        else if( sum_last10_time <= 30*60)
+        else if( sum_last10_time <= 25*60)
         {            
             if(next_target > last_target*6/7)  last10_target = last_target*6/7;   
         }else{};
         /*if the last 5 blocks are generated in short time, we increase the difficulty of last blocks*/
-        // last 5 block time : 5.0  7.5 10 15 minute 
+        // last 5 block time : 5.0  7.5 10 12.5 minute 
         if( sum_last05_time <= 5*60)   
         {  
             if(next_target > last_target*3/4)  last05_target = last_target*3/4;   
@@ -218,7 +218,7 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
         {            
             if(next_target > last_target*5/6)  last05_target = last_target*5/6;   
         } 
-        else if( sum_last05_time <= 15*60)
+        else if( sum_last05_time <= 12.5*60)
         {            
             if(next_target > last_target*6/7)  last05_target = last_target*6/7;   
         }else{};
