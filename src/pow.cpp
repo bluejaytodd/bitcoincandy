@@ -204,6 +204,17 @@ unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexPrev, const 
          *when the effect of the last rule wears off in the new block
          *DAA will switch to normal LWMA and cause dramatically diff drops*/
     }
+    /* Compare current time and last block time 
+     * If block is not generated for 10 minute, increase next_target by 30%  */
+    int64_t current_time = GetAdjustedTime();  
+    int64_t time_last_block_generated  = pindexPrev ->GetBlockTime()  ;
+    int mining_noblocktime =(int) (( current_time - time_last_block_generated)/600); 
+    if(mining_noblocktime<0) mining_noblocktime =  0;
+    if(height>nNewRuleHeight && 0< mining_noblocktime ){             
+        for(int i=0; i<mining_noblocktime; i++) next_target *=13/10; 
+        //For each 10 minute : no_new_block was found, increase target 30%
+    }
+
     if (next_target > pow_limit ){
         return pow_limit.GetCompact();
     }
